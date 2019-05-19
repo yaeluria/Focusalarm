@@ -22,6 +22,7 @@
   "*://theinsomniacsociety.com/timer.html",
   "*://www.focusmate.com/launch/",
   "tabs",
-  "storage"
+  "storage",
+  "activeTab"
   ]
 }

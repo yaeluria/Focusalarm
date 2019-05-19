@@ -22,14 +22,7 @@ const styles = theme => ({
         margin: `${theme.spacing.unit}px 0`,
 
     },
-    // paper: {
-    //     padding: theme.spacing.unit * 2,
-    //     height: '100%',
-    //     color: theme.palette.text.secondary,
-    // },
-    // control: {
-    //     padding: theme.spacing.unit * 2,
-    // },
+
     audio: {
         marginTop: '0.5rem',
         marginLeft: 'auto'
@@ -41,24 +34,46 @@ const styles = theme => ({
 class SoundRadioForm extends React.Component {
 
     state = {
-        value: chrome.storage.sync.get(['sound'], function(result) {
-            return result.sound;
-           }) || "Bell" 
+        // value: chrome.storage.sync.get(['sound'], function(result) {
+        //     console.log(result.sound);
+        //     return result.sound;
+        //    }) || "Bell" 
+      value: {}
     };
 
     handleChange = event => {
         const soundVal = event.target.value;
-        this.setState({ value: soundVal });
+        console.log('soundVal before callback is' + soundVal);
+        // this.setState({ value: soundVal });
+        this.setState(()=>{
         chrome.storage.sync.set({ 'sound': soundVal }, () => {
-            console.log('Value is set to ' + soundVal);
+            console.log('Value is set to ' + this.state.value);
           });
+        });
+      
     };
-  
 
+    componentDidMount() {
+        this.fetchSettings();
+      }  
+      fetchSettings() {
+        chrome.storage.sync.get(this.state, ({sound}) => {
+            if(sound){
+                console.log(`${sound} from fetch settings`)
+                this.setState({value: sound});
+            }
+            else {
+                this.setState({value: 'Bell'});
+            }
+        
+          
+        });
+      }  
+   
     render() {
         const { classes } = this.props;
-
-
+ 
+    
         return (
             <div className={classes.root}>
 

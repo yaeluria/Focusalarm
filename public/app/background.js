@@ -1,6 +1,6 @@
 // focusmate session url example: https://www.focusmate.com/launch/44169c1a-5efc-4289-b3f0-80406b02aa9d
 
-
+/*global chrome*/
 
 
 
@@ -29,7 +29,8 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
 
  if (changeInfo.title === "Ends In 0m 23s"|| changeInfo.title === "Ends In 0m 22s" || changeInfo.title === "Ends In 0m 21s" || changeInfo.title === "59:50" || changeInfo.title === "59:49" || changeInfo.title === "59:48") {
      console.log('should play audio')
-     console.log(soundLink)
+     console.log(chosenSound);
+     console.log(soundLink);
      audio.play()
 
 
