@@ -4,9 +4,9 @@
 
 
 
-const chosenSound = chrome.storage.sync.get(['sound'], function(result) {
+let chosenSound = chrome.storage.sync.get(['sound'], function(result) {
     return result.sound;
-   });
+   }); 
 
 
 
@@ -28,7 +28,7 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
 
 
  if (changeInfo.title === "Ends In 0m 23s"|| changeInfo.title === "Ends In 0m 22s" || changeInfo.title === "Ends In 0m 21s" || changeInfo.title === "59:50" || changeInfo.title === "59:49" || changeInfo.title === "59:48") {
-     console.log('should play audio')
+     console.log('should play audio');
      console.log(chosenSound);
      console.log(soundLink);
      audio.play()

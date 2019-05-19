@@ -34,40 +34,29 @@ const styles = theme => ({
 class SoundRadioForm extends React.Component {
 
     state = {
-        // value: chrome.storage.sync.get(['sound'], function(result) {
-        //     console.log(result.sound);
-        //     return result.sound;
-        //    }) || "Bell" 
       value: {}
     };
 
     handleChange = event => {
         const soundVal = event.target.value;
         console.log('soundVal before callback is' + soundVal);
-        // this.setState({ value: soundVal });
-        this.setState(()=>{
+     
         chrome.storage.sync.set({ 'sound': soundVal }, () => {
-            console.log('Value is set to ' + this.state.value);
+            console.log('Value is set to ' + soundVal);
           });
-        });
-      
+        // });
+        this.setState({value: soundVal});
     };
 
     componentDidMount() {
         this.fetchSettings();
       }  
       fetchSettings() {
-        chrome.storage.sync.get(this.state, ({sound}) => {
-            if(sound){
-                console.log(`${sound} from fetch settings`)
-                this.setState({value: sound});
-            }
-            else {
-                this.setState({value: 'Bell'});
-            }
-        
-          
-        });
+      
+            chrome.storage.sync.get(['sound'], (result)=>{
+                const sound = result.sound || 'bell'
+                    this.setState({value: sound});
+            })
       }  
    
     render() {
