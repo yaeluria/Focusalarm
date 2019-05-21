@@ -1,3 +1,4 @@
+/*global chrome*/
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -7,8 +8,7 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
+
 
 
 const styles = theme => ({
@@ -34,12 +34,31 @@ const styles = theme => ({
 
 class TimeRadioForm extends React.Component {
   state = {
-    value: '1 minute',
+    value: {}
   };
 
   handleChange = event => {
-    this.setState({ value: event.target.value });
-  };
+    const timeVal = event.target.value;
+    console.log('timeVal before callback is' + timeVal);
+ 
+    chrome.storage.sync.set({ 'time': timeVal }, () => {
+        console.log('Value is set to ' + timeVal);
+     //   chrome.runtime.sendMessage({type: "new time"});
+      });
+    // });
+    this.setState({value: timeVal});
+};
+
+componentDidMount() {
+    this.fetchSettings();
+  }  
+  fetchSettings() {
+  
+        chrome.storage.sync.get(['time'], (result)=>{
+            const time = result.time || '1 minute'
+                this.setState({value: time});
+        })
+  }  
 
   render() {
     const { classes } = this.props;
@@ -58,9 +77,9 @@ class TimeRadioForm extends React.Component {
             value={this.state.value}
             onChange={this.handleChange}
           >
-            <FormControlLabel value="1 minute" control={<Radio />} label="1 minute" />
+            <FormControlLabel value="59 seconds" control={<Radio />} label="1 minute" />
             <FormControlLabel value="20 seconds" control={<Radio />} label="20 seconds" />
-            <FormControlLabel value="Session end" control={<Radio />} label="Session end" />
+            <FormControlLabel value="0 seconds" control={<Radio />} label="Session end" />
 
           </RadioGroup>
         </FormControl>

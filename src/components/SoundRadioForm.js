@@ -43,6 +43,7 @@ class SoundRadioForm extends React.Component {
      
         chrome.storage.sync.set({ 'sound': soundVal }, () => {
             console.log('Value is set to ' + soundVal);
+          //  chrome.runtime.sendMessage({type: "new sound"});
           });
         // });
         this.setState({value: soundVal});
