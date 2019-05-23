@@ -55,7 +55,7 @@ componentDidMount() {
   fetchSettings() {
   
         chrome.storage.sync.get(['time'], (result)=>{
-            const time = result.time || '1 minute'
+            const time = result.time || '59 seconds'
                 this.setState({value: time});
         })
   }  
