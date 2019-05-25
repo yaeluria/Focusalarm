@@ -18,7 +18,7 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
             const linkForChoice = (choice) => ({
                  'Bell' : 'https://res.cloudinary.com/drvycak8r/video/upload/v1557737548/storage/30161__herbertboland__belltinystrike.wav',
                  'Chirp': 'https://res.cloudinary.com/drvycak8r/video/upload/v1557737433/storage/85403__readeonly__canaryartie-3.wav',
-                 'T. rex roar' : 'https://interactive-examples.mdn.mozilla.net/media/examples/t-rex-roar.mp3'
+                 'T.rex roar' : 'https://interactive-examples.mdn.mozilla.net/media/examples/t-rex-roar.mp3'
                 })[choice]
                 
             const soundLink = linkForChoice(chosenSound);
@@ -39,7 +39,7 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
            console.log (minutes(title));
            
      
-            //const splitTitle = title.split(' ');
+            const splitTitle = title.split(' ');
             //const timeLeftString = splitTitle[3]
            // const timeLeft = parseInt(timeLeftString, 10);
           //  console.log(timeLeft);
@@ -50,16 +50,18 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
          //        return;
          //    }
          
-            if (((!played[tabId]) && ((title === "Session Completed") || ((minutes(title) === 0) && (seconds(title) <= timeLeftChoice))))){
+            if (((!played[tabId]) &&
+             ((title === "Session Completed")
+             || ((splitTitle.length === 4) && (minutes(title) === 0) && (seconds(title) <= timeLeftChoice))))){
              audio.play();
-             console.log(`should play ${audio}`)
+             console.log("should play audio")
              played[tabId] = true;
              
             }
             
             if (title === "59:50"){
                 audio.play();
-                console.log(`should play audio`)
+                console.log("should play audio")
             }
      
           
@@ -80,9 +82,7 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
     
   
 }
-function checkTab(tabId, changeInfo, tabInfo) {
-    return tabId;
-};
+
 
 
 
