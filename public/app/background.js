@@ -13,7 +13,7 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
 
        
             const chosenSound = result.sound;
-            const chosenTime = result.time || "59 seconds";
+            const chosenTime = result.time || "1 minute";
          
             const linkForChoice = (choice) => ({
                  'Bell' : 'https://res.cloudinary.com/drvycak8r/video/upload/v1557737548/storage/30161__herbertboland__belltinystrike.wav',
@@ -49,20 +49,36 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
          //        audio.play();
          //        return;
          //    }
-         
-            if (((!played[tabId]) &&
-             ((title === "Session Completed")
-             || ((splitTitle.length === 4) && (minutes(title) === 0) && (seconds(title) <= timeLeftChoice))))){
-             audio.play();
-             console.log("should play audio")
-             played[tabId] = true;
              
-            }
-            
-            if (title === "59:50"){
+        
+          
+            if ((!played[tabId]) &&
+            ((title === "Session Completed") ||
+            ((splitTitle.length === 4) && (minutes(title) < timeLeftChoice)))){
                 audio.play();
                 console.log("should play audio")
-            }
+                played[tabId] = true;
+               }
+             
+
+            // if (((!played[tabId]) &&
+            //  ((title === "Session Completed")
+            //  || ((splitTitle.length === 4) && (minutes(title) === 0) && (seconds(title) <= timeLeftChoice))))){
+            //  audio.play();
+            //  console.log("should play audio")
+            //  played[tabId] = true;
+             
+            // }
+          
+            //insomnia timer (test) code
+            const splitInsomnia = title.split(":");
+            console.log(splitInsomnia);  
+            if ((!played[tabId]) &&
+            ((splitInsomnia[0]) < timeLeftChoice)){
+                audio.play();
+                console.log("should play audio")
+                played[tabId] = true;
+               }
      
           
          //     if (changeInfo.title === "Ends In 0m 23s"|| changeInfo.title === "Ends In 0m 22s" || changeInfo.title === "Ends In 0m 21s" || changeInfo.title === "59:50" || changeInfo.title === "59:49" || changeInfo.title === "59:48") {
@@ -86,7 +102,9 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
 
 
 
-
+// chrome.webNavigation.onCompleted.addListener(function() { 
+//     alert("This is my favorite website!");
+// }, {url: [{urlMatches : '*://*.focusmate.com/*'}]});
 
 
 chrome.tabs.onUpdated.addListener(handleTimeChange);

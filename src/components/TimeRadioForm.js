@@ -55,7 +55,7 @@ componentDidMount() {
   fetchSettings() {
   
         chrome.storage.sync.get(['time'], (result)=>{
-            const time = result.time || '59 seconds'
+            const time = result.time || '1 minute'
                 this.setState({value: time});
         })
   }  
@@ -77,9 +77,10 @@ componentDidMount() {
             value={this.state.value}
             onChange={this.handleChange}
           >
-            <FormControlLabel value="59 seconds" control={<Radio />} label="1 minute" />
-            <FormControlLabel value="20 seconds" control={<Radio />} label="20 seconds" />
-            <FormControlLabel value="0 seconds" control={<Radio />} label="Session end" />
+            <FormControlLabel value="10 minutes" control={<Radio />} label="10 minutes" />
+            <FormControlLabel value="5 minutes" control={<Radio />} label="5 minutes" />
+            <FormControlLabel value="1 minute" control={<Radio />} label="1 minute" />
+            [still have session end option?]
 
           </RadioGroup>
         </FormControl>
