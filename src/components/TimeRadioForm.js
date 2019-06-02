@@ -78,8 +78,11 @@ componentDidMount() {
             onChange={this.handleChange}
           >
             <FormControlLabel value="10 minutes" control={<Radio />} label="10 minutes" />
-            <FormControlLabel value="5 minutes" control={<Radio />} label="5 minutes" />
-            <FormControlLabel value="1 minute" control={<Radio />} label="1 minute" />
+            <FormControlLabel value="2 minutes" control={<Radio />} label="2 minutes" />
+            <FormControlLabel value="1 minutes" control={<Radio />} label="1 minute" />
+            <FormControlLabel value="Session Completed" control={<Radio />} label="On End" />
+            
+
             [still have session end option?]
 
           </RadioGroup>
