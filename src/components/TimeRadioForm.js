@@ -80,6 +80,7 @@ componentDidMount() {
             <FormControlLabel value="10 minutes" control={<Radio />} label="10 minutes" />
             <FormControlLabel value="2 minutes" control={<Radio />} label="2 minutes" />
             <FormControlLabel value="1 minutes" control={<Radio />} label="1 minute" />
+            <FormControlLabel value="20 seconds" control={<Radio />} label="20 seconds" />
             <FormControlLabel value="Session Completed" control={<Radio />} label="On End" />
             
 

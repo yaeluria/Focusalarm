@@ -2,94 +2,124 @@
 
 /*global chrome*/
 
-//put callback inside eventlistenr
-//or- put callback function inside handletimechange (play inside callback function)
-
-let played= {};
+const played = {};
+const urlCache = {};
 
 function handleTimeChange(tabId, changeInfo, tabInfo) {
+    const tabUrl = tabInfo.url;
+    console.log(tabUrl)
 
-        chrome.storage.sync.get(['sound', 'time'], function(result) {
+    if (typeof urlCache[tabUrl] === 'boolean' && urlCache[tabUrl] === false) {
+        console.log("false");
+        return;
+    } else if (urlCache[tabUrl] === undefined) {
+        console.log("undefined")
+        tabUrl.includes("https://www.focusmate.com/launch/") || tabUrl.includes("http://theinsomniacsociety.com/timer.html") ? urlCache[tabUrl] = true : urlCache[tabUrl] = false;
+    }
 
-       
-            const chosenSound = result.sound;
-            const chosenTime = result.time || "1 minutes";
-         
-            const linkForChoice = (choice) => ({
-                 'Bell' : 'https://res.cloudinary.com/drvycak8r/video/upload/v1557737548/storage/30161__herbertboland__belltinystrike.wav',
-                 'Chirp': 'https://res.cloudinary.com/drvycak8r/video/upload/v1557737433/storage/85403__readeonly__canaryartie-3.wav',
-                 'T.rex roar' : 'https://interactive-examples.mdn.mozilla.net/media/examples/t-rex-roar.mp3'
-                })[choice]
+
+    chrome.storage.sync.get(['sound', 'time'], function (result) {
+
+        const chosenSound = result.sound;
+        const chosenTime = result.time || "1 minutes";
+
+        const linkForChoice = (choice) => ({
+            'Bell': 'https://res.cloudinary.com/drvycak8r/video/upload/v1557737548/storage/30161__herbertboland__belltinystrike.wav',
+            'Chirp': 'https://res.cloudinary.com/drvycak8r/video/upload/v1557737433/storage/85403__readeonly__canaryartie-3.wav',
+            'T.rex roar': 'https://interactive-examples.mdn.mozilla.net/media/examples/t-rex-roar.mp3'
+        })[choice]
+
+        const soundLink = linkForChoice(chosenSound);
+
+        const audio = new Audio(soundLink);
+
+        console.log(chosenTime);
+        const timeLeftChoice = parseInt(chosenTime, 10);
+        console.log(timeLeftChoice);
+        const title = changeInfo.title;
+        console.log(title);
+
+
+        const minutes = (t) => parseInt((t.split(' ')[2]), 10);
+        const seconds = (t) => parseInt((t.split(' ')[3]), 10);
+
+        console.log(minutes(title));
+        console.log(seconds(title));
+
+
+        const splitTitle = title.split(' ');
+        const playAudio = () => {
+            audio.play();
+            console.log("should play audio")
+            played[tabId] = true;
+        }
+
+
+        if (!played[tabId]) {
+            //  insomnia timer (test) code
+            if (tabUrl.includes("http://theinsomniacsociety.com/timer.html")) {
+                const splitInsomnia = title.split(":");
+                console.log(splitInsomnia);
                 
-            const soundLink = linkForChoice(chosenSound);
-                
-            const audio = new Audio(soundLink); 
-            //  console.log("change info:")
-            //  console.log("|"+ changeInfo.title + "|");
-            console.log(chosenTime);
-            const timeLeftChoice = parseInt(chosenTime, 10);
-            console.log(timeLeftChoice);
-            const title = changeInfo.title;
-            console.log(title);
-     
-           const seconds = (t) => parseInt((t.split(' ')[3]),10);
-           const minutes = (t) => parseInt((t.split(' ')[2]),10);
-           
-           console.log (seconds(title));
-           console.log (minutes(title));
-           
-     
-            const splitTitle = title.split(' ');
-      
-             
-        
-          
-            if ((!played[tabId]) &&
-            ((title === "Session Completed") ||
-            ((splitTitle.length === 4) && (minutes(title) < timeLeftChoice)))){
-                audio.play();
-                console.log("should play audio")
-                played[tabId] = true;
-               }
-             
-
-           
-          
-            //insomnia timer (test) code
-            const splitInsomnia = title.split(":");
-            console.log(splitInsomnia);  
-            if ((!played[tabId]) &&
-            ((splitInsomnia[0]) < timeLeftChoice)){
-                audio.play();
-                console.log("should play audio")
-                played[tabId] = true;
-               }
-     
-          }); 
+                 
          
+            const insomniaPlay = (index) => {
+                if ((splitInsomnia[index]) < timeLeftChoice) {
+                    playAudio();
+                }
+            }
+            const checkMinutes = () => {
+                if(splitInsomnia[0] === '00') {
+                    insomniaPlay(1)
+                }  
+            }
         
-         
-
- 
+           
+            (chosenTime.split(" ")[1]) === "minutes" ? insomniaPlay(0) :  checkMinutes();
     
-  
+
+            }
+            else {
+              // const validTitle = (splitTitle.length === 4) && (splitTitle[0] === "Ends");
+
+
+                if ((chosenTime.split(" ")[1]) === "seconds") {
+
+                    if (
+                        (title === "Session Completed") || (
+                            (splitTitle.length === 4) && (splitTitle[0] === "Ends") &&
+                            (minutes(title) === 0) && (seconds(title) < timeLeftChoice)
+                        )
+
+                    ) {
+                        playAudio();
+
+                    }
+
+
+                }
+
+                else if (
+                    (title === "Session Completed") || (
+                        (splitTitle.length === 4) && (splitTitle[0] === "Ends") &&
+                        (minutes(title) < timeLeftChoice)
+                    )
+
+                ) {
+                    playAudio();
+
+                }
+
+            }
+
+
+        }
+
+
+    })
 }
 
- const onUpdatedListener = () => chrome.tabs.onUpdated.addListener(handleTimeChange);
+
+chrome.tabs.onUpdated.addListener(handleTimeChange);
 
 
-
-// chrome.webNavigation.onCompleted.addListener(function() { 
-//     chrome.tabs.onUpdated.addListener(handleTimeChange);
-
-// }, {url: [{urlMatches : '*://*.focusmate.com/*'}]});
-
-const filter = {
-    url:
-    [
-      {hostContains: ".focusmate"},
-    ]
-  }
-
-  
-  chrome.webNavigation.onCompleted.addListener(onUpdatedListener, filter);
