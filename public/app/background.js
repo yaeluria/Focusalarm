@@ -40,11 +40,7 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
         console.log(title);
 
 
-        const minutes = (t) => parseInt((t.split(' ')[2]), 10);
-        const seconds = (t) => parseInt((t.split(' ')[3]), 10);
-
-        console.log(minutes(title));
-        console.log(seconds(title));
+      
 
 
         const splitTitle = title.split(' ');
@@ -58,11 +54,10 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
         if (!played[tabId]) {
             //  insomnia timer (test) code
             if (tabUrl.includes("http://theinsomniacsociety.com/timer.html")) {
-                const splitInsomnia = title.split(":");
+              
+            const splitInsomnia = title.split(":");
                 console.log(splitInsomnia);
                 
-                 
-         
             const insomniaPlay = (index) => {
                 if ((splitInsomnia[index]) < timeLeftChoice) {
                     playAudio();
@@ -74,47 +69,32 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
                 }  
             }
         
-           
             (chosenTime.split(" ")[1]) === "minutes" ? insomniaPlay(0) :  checkMinutes();
     
 
             }
             else {
-              // const validTitle = (splitTitle.length === 4) && (splitTitle[0] === "Ends");
+                const minutes = (t) => parseInt((t.split(' ')[2]), 10);
+                const seconds = (t) => parseInt((t.split(' ')[3]), 10);
+         
+                const validTitle = (splitTitle.length === 4) && (splitTitle[0] === "Ends");
+               
+                const conditionsMinutes = minutes(title) < timeLeftChoice;
+                const conditionsSeconds =  ((minutes(title) === 0) && (seconds(title) < timeLeftChoice));
 
-
-                if ((chosenTime.split(" ")[1]) === "seconds") {
-
-                    if (
-                        (title === "Session Completed") || (
-                            (splitTitle.length === 4) && (splitTitle[0] === "Ends") &&
-                            (minutes(title) === 0) && (seconds(title) < timeLeftChoice)
-                        )
-
-                    ) {
-                        playAudio();
-
-                    }
-
-
-                }
-
-                else if (
-                    (title === "Session Completed") || (
-                        (splitTitle.length === 4) && (splitTitle[0] === "Ends") &&
-                        (minutes(title) < timeLeftChoice)
-                    )
-
-                ) {
+             const Play = (conditions) => {
+                if((title === "Session Completed") || (validTitle && (conditions))){
                     playAudio();
-
                 }
+             } 
 
+
+            chosenTime.split(" ")[1] === "minutes" ? Play(conditionsMinutes) : Play(conditionsSeconds);
+               
+               
             }
 
-
         }
-
 
     })
 }
