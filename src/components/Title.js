@@ -3,7 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TypoGraphy from '@material-ui/core/TypoGraphy';
-import { inherits } from 'util';
 
 
 

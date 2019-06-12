@@ -2,7 +2,7 @@
   "manifest_version": 2,
 
   "name": "Focusalarm",
-  "description": "Have an alarm go off at the end of Focusmate sessions",
+  "description": "Have an alarm go off before the end of Focusmate sessions, with different sounds and options of ringing times to choose from",
   "version": "0.0.1",
 
   "browser_action": {
@@ -19,7 +19,6 @@
 },
 "content_security_policy": "script-src 'self' 'sha256-5As4+3YpY62+l38PsxCEkjB1R4YtyktBtRScTJ3fyLU='; object-src 'self'",
 "permissions": [
-  "webNavigation",
   "*://theinsomniacsociety.com/timer.html",
   "*://*.focusmate.com/",
   "tabs",
