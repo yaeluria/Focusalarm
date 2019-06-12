@@ -7,13 +7,11 @@ const urlCache = {};
 
 function handleTimeChange(tabId, changeInfo, tabInfo) {
     const tabUrl = tabInfo.url;
-    console.log(tabUrl)
+
 
     if (typeof urlCache[tabUrl] === 'boolean' && urlCache[tabUrl] === false) {
-        console.log("false");
         return;
     } else if (urlCache[tabUrl] === undefined) {
-        console.log("undefined")
         tabUrl.includes("https://www.focusmate.com/launch/") || tabUrl.includes("http://theinsomniacsociety.com/timer.html") ? urlCache[tabUrl] = true : urlCache[tabUrl] = false;
     }
 
@@ -33,11 +31,8 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
 
         const audio = new Audio(soundLink);
 
-        console.log(chosenTime);
         const timeLeftChoice = parseInt(chosenTime, 10);
-        console.log(timeLeftChoice);
         const title = changeInfo.title;
-        console.log(title);
 
 
       
@@ -56,7 +51,6 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
             if (tabUrl.includes("http://theinsomniacsociety.com/timer.html")) {
               
             const splitInsomnia = title.split(":");
-                console.log(splitInsomnia);
                 
             const insomniaPlay = (index) => {
                 if ((splitInsomnia[index]) < timeLeftChoice) {

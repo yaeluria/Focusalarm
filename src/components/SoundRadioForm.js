@@ -39,10 +39,8 @@ class SoundRadioForm extends React.Component {
 
     handleChange = event => {
         const soundVal = event.target.value;
-        console.log('soundVal before callback is' + soundVal);
      
         chrome.storage.sync.set({ 'sound': soundVal }, () => {
-            console.log('Value is set to ' + soundVal);
           });
         this.setState({value: soundVal});
     };
