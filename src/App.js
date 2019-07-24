@@ -2,7 +2,7 @@ import React from 'react';
 //import logo from './logo.svg';
 import './App.css';
 import Title from './components/Title'
-import TimeRadioForm from './components/TimeRadioForm'
+import TimeCheckForm from './components/TimeCheckForm'
 import SoundRadioForm from './components/SoundRadioForm'
 
 
@@ -17,7 +17,7 @@ function App() {
      
         <Title/>
   
-      <TimeRadioForm />
+      <TimeCheckForm />
       <SoundRadioForm />
 
     </div>
