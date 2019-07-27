@@ -16,10 +16,14 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
     }
 
 
-    chrome.storage.sync.get(['sound', 'time'], function (result) {
+    chrome.storage.sync.get(['sound', 'time', 'oneMinute'], function (result) {
 
         const chosenSound = result.sound;
         const chosenTime = result.time || "1 minutes";
+        const checkedForOneMinute = result.oneMinute;
+        console.log(chosenTime);
+        console.log(checkedForOneMinute);
+
 
         const linkForChoice = (choice) => ({
             'Bell': 'https://res.cloudinary.com/drvycak8r/video/upload/v1557737548/storage/30161__herbertboland__belltinystrike.wav',
@@ -32,13 +36,9 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
         const audio = new Audio(soundLink);
 
         const timeLeftChoice = parseInt(chosenTime, 10);
-        const title = changeInfo.title;
-
-
-      
-
-
+        const title = changeInfo.title || "Title";
         const splitTitle = title.split(' ');
+       
         const playAudio = () => {
             audio.play();
             console.log("should play audio")
