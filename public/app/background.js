@@ -3,6 +3,7 @@
 /*global chrome*/
 
 const played = {};
+const playedForAll = {};
 const urlCache = {};
 
 function handleTimeChange(tabId, changeInfo, tabInfo) {
@@ -16,14 +17,18 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
     }
 
 
-    chrome.storage.sync.get(['sound', 'time', 'oneMinute'], function (result) {
+    chrome.storage.sync.get(null, function (result) {
+     
+        const chosenTimes = [];
+        
+        for (let k in result) {
+            if (result[k][0] === true) {
+                const chosenTimeOption = result[k][1];
+                chosenTimes.push(chosenTimeOption);
+            }
+        }
 
         const chosenSound = result.sound;
-        const chosenTime = result.time || "1 minutes";
-        const checkedForOneMinute = result.oneMinute;
-        console.log(chosenTime);
-        console.log(checkedForOneMinute);
-
 
         const linkForChoice = (choice) => ({
             'Bell': 'https://res.cloudinary.com/drvycak8r/video/upload/v1557737548/storage/30161__herbertboland__belltinystrike.wav',
@@ -35,15 +40,17 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
 
         const audio = new Audio(soundLink);
 
-        const timeLeftChoice = parseInt(chosenTime, 10);
+        let timeLeftChoice;
+       
         const title = changeInfo.title || "Title";
         const splitTitle = title.split(' ');
        
-        const playAudio = () => {
+        const playAudio = (alarm) => {
             audio.play();
             console.log("should play audio")
-            played[tabId] = true;
+            playedForAll[alarm] = true;
         }
+        
 
 
         if (!played[tabId]) {
@@ -52,21 +59,35 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
               
             const splitInsomnia = title.split(":");
                 
-            const insomniaPlay = (index) => {
+            const insomniaPlay = (index, a) => {
                 if ((splitInsomnia[index]) < timeLeftChoice) {
-                    playAudio();
+                    playAudio(a);
                 }
             }
-            const checkMinutes = () => {
+            const checkMinutes = (a) => {
                 if(splitInsomnia[0] === '00') {
-                    insomniaPlay(1)
+                    insomniaPlay(1,a)
                 }  
             }
+           
+        //  for(let chosenTime of chosenTimes){
+        //         timeLeftChoice = parseInt(chosenTime, 10);
+        //         if(!playedForAll[chosenTime]){
+        //             (chosenTime.split(" ")[1]) === "minutes" ? insomniaPlay(0,chosenTime) :  checkMinutes(chosenTime);
+        //         }
         
-            (chosenTime.split(" ")[1]) === "minutes" ? insomniaPlay(0) :  checkMinutes();
-    
+           
+        //  if ((Object.keys(playedForAll).length) === (chosenTimes.length)){
+        //     played[tabId] = true;
+        //  }
+         
+         //what if user adds another alarm after all alarms have played?
 
+                }
+                
             }
+           
+            
             else {
                 const minutes = (t) => parseInt((t.split(' ')[2]), 10);
                 const seconds = (t) => parseInt((t.split(' ')[3]), 10);
@@ -76,15 +97,16 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
                 const conditionsMinutes = minutes(title) < timeLeftChoice;
                 const conditionsSeconds =  ((minutes(title) === 0) && (seconds(title) < timeLeftChoice));
 
-             const Play = (conditions) => {
+             const Play = (conditions, a) => {
                 if((title === "Session Completed") || (validTitle && (conditions))){
                     playAudio();
                 }
              } 
-
-
-            chosenTime.split(" ")[1] === "minutes" ? Play(conditionsMinutes) : Play(conditionsSeconds);
-               
+             for(let chosenTime of chosenTimes){
+                timeLeftChoice = parseInt(chosenTime, 10);
+                chosenTime.split(" ")[1] === "minutes" ? Play(conditionsMinutes, chosenTime) : Play(conditionsSeconds, chosenTime);
+    
+             }
                
             }
 
