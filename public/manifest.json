@@ -21,6 +21,7 @@
 "permissions": [
   "*://theinsomniacsociety.com/timer.html",
   "*://*.focusmate.com/",
+  "*://*.csb.app/",
   "tabs",
   "storage",
   "activeTab"
