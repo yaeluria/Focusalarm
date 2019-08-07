@@ -16,8 +16,11 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
     return;
   } else if (urlCache[tabUrl] === undefined) {
     console.log("urlCache[tabUrl] is undefined");
-    //tabUrl.includes("https://www.focusmate.com/launch/") ||
-    if (tabUrl.includes("csb.app/")) {
+    //
+    if (
+     //   tabUrl.includes("https://www.focusmate.com/launch/") ||
+        tabUrl.includes("csb.app/")
+        ) {
         console.log("playForAll: ");
         console.log(playedForAll);
       if (playedForAll !== undefined) {
@@ -36,6 +39,7 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
   }
 
   chrome.storage.sync.get(null, function(result) {
+      console.log(result);
     const chosenTimes = [];
 
     for (let k in result) {
@@ -68,13 +72,12 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
           chosenTimeOption.split(" ")[1] === "minutes"
             ? shouldAddAlarm(conditionsMins)
             : shouldAddAlarm(conditionsSecs);
-        if (dontAddAlarm === true) {
-          console.log("breaking");
-          break;
+        if (dontAddAlarm !== true) {
+            console.log("pushing " + chosenTimeOption);
+            chosenTimes.push(chosenTimeOption);
+            console.log(chosenTimes);
         }
-        console.log("pushing " + chosenTimeOption);
-        chosenTimes.push(chosenTimeOption);
-        console.log(chosenTimes);
+       
       }
     }
 
