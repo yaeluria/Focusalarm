@@ -10,19 +10,25 @@ const urlCache = {};
 
 function handleTimeChange(tabId, changeInfo, tabInfo) {
   const tabUrl = tabInfo.url;
-  console.log(urlCache[tabUrl]);
 
   if (typeof urlCache[tabUrl] === "boolean" && urlCache[tabUrl] === false) {
     return;
   } else if (urlCache[tabUrl] === undefined) {
-    console.log("urlCache[tabUrl] is undefined");
-    //
+    
     if (
-     //   tabUrl.includes("https://www.focusmate.com/launch/") ||
+       tabUrl.includes("https://www.focusmate.com/launch/") ||
         tabUrl.includes("csb.app/")
         ) {
-        console.log("playForAll: ");
-        console.log(playedForAll);
+            chrome.storage.sync.get(['time'], function (result) {
+                console.log(result);
+                if (result.time){
+                   delete result.time;
+                   console.log("deleted time");
+                   console.log("result:")
+                   console.log(result);
+                }
+              })
+       
       if (playedForAll !== undefined) {
         for (const prop of Object.getOwnPropertyNames(playedForAll)) {
           delete playedForAll[prop];
@@ -31,6 +37,7 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
           console.log("playedForAll after deletion: ");
           console.log(playedForAll);
       }
+      
 
       urlCache[tabUrl] = true;
     } else {
@@ -39,12 +46,10 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
   }
 
   chrome.storage.sync.get(null, function(result) {
-      console.log(result);
     const chosenTimes = [];
 
     for (let k in result) {
       if (result[k][0] === true) {
-        console.log(playedForAll);
         const chosenTimeOption = result[k][1];
 
         const chosenTimeNumber = parseInt(chosenTimeOption, 10);
@@ -73,9 +78,7 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
             ? shouldAddAlarm(conditionsMins)
             : shouldAddAlarm(conditionsSecs);
         if (dontAddAlarm !== true) {
-            console.log("pushing " + chosenTimeOption);
             chosenTimes.push(chosenTimeOption);
-            console.log(chosenTimes);
         }
        
       }
