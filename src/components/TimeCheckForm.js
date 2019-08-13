@@ -82,7 +82,7 @@ class TimeCheckForm extends React.Component {
       <div className={classes.root}>
 
         <FormControl component="fieldset" className={classes.formControl}>
-          <FormLabel component="legend">Ringing Time</FormLabel>
+          <FormLabel component="legend">Notify me before the session ends</FormLabel>
           <FormGroup
             row="true"
             aria-label="Ringtime"
