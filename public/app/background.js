@@ -30,12 +30,11 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
               })
        
       if (playedForAll !== undefined) {
-        for (const prop of Object.getOwnPropertyNames(playedForAll)) {
-          delete playedForAll[prop];
+        for (const timePlayed of Object.getOwnPropertyNames(playedForAll)) {
+          delete playedForAll[timePlayed];
           
         }
-          console.log("playedForAll after deletion: ");
-          console.log(playedForAll);
+         
       }
       
 
@@ -48,26 +47,26 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
   chrome.storage.sync.get(null, function(result) {
     const chosenTimes = [];
 
-    for (let k in result) {
-      if (result[k][0] === true) {
-        const chosenTimeOption = result[k][1];
+    for (let userOption in result) {
+      if (result[userOption][0] === true) {
+        const chosenTimeOption = result[userOption][1];
 
         const chosenTimeNumber = parseInt(chosenTimeOption, 10);
 
+
         //if chosenTimeOption is in minutes and an alarm played for seconds
         //if chosenTimeOption is in minutes and an alarm played for minutes that were less than chosenTimeNumber
-        //if chosenTimeOption is in seconds and an alarm played for seconds that were less than ChosenTimeNumber - not going to happen in current version of app since there is only one seconds option but maybe later on.
-
         const conditionsMins = a =>
           a.split(" ")[1] === "seconds" ||
           (a.split(" ")[1] === "minutes" && a.split(" ")[0] < chosenTimeNumber);
-
+       
+        //if chosenTimeOption is in seconds and an alarm played for seconds that were less than ChosenTimeNumber - not going to happen in current version of app since there is only one seconds option but maybe later on.
         const conditionsSecs = a =>
           a.split(" ")[1] === "seconds" && a.split(" ")[0] < chosenTimeNumber;
 
         const shouldAddAlarm = conditions => {
-          for (let k in playedForAll) {
-            if (conditions(k)) {
+          for (let timeIndex in playedForAll) {
+            if (conditions(timeIndex)) {
               return true;
             }
           }
@@ -109,7 +108,6 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
       audio.play();
       console.log("should play audio");
       playedForAll[alarm] = true;
-      console.log(playedForAll);
     };
 
     if (!played[tabId]) {
