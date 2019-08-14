@@ -111,7 +111,6 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
     };
 
     if (!played[tabId]) {
-      console.log("title:" + title);
       const minutes = t => parseInt(t.split(" ")[2], 10);
       const seconds = t => parseInt(t.split(" ")[3], 10);
 

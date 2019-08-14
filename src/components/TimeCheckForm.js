@@ -44,13 +44,7 @@ class TimeCheckForm extends React.Component {
     componentDidMount() {
       this.fetchSettings();
   }
-//   fetchSettings() {
-      
-//     chrome.storage.sync.get(['sound'], (result)=>{
-//         const sound = result.sound || 'bell'
-//             this.setState({value: sound});
-//     })
-// }  
+
 
   fetchSettings() {
       for (let timeOption in this.state) {

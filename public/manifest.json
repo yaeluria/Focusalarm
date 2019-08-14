@@ -3,7 +3,7 @@
 
   "name": "Focusalarm",
   "description": "Have an alarm go off before the end of Focusmate sessions, with different sounds and options of ringing times to choose from.",
-  "version": "0.1.0",
+  "version": "0.1.1",
 
   "browser_action": {
     "default_popup": "index.html",
