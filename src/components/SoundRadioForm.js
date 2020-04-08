@@ -51,6 +51,7 @@ class SoundRadioForm extends React.Component {
       fetchSettings() {
       
             chrome.storage.sync.get(['sound'], (result)=>{
+              
                 const sound = result.sound || 'Bell'
                     this.setState({value: sound});
             })

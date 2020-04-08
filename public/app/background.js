@@ -11,32 +11,34 @@ const urlCache = {};
 function handleTimeChange(tabId, changeInfo, tabInfo) {
   const tabUrl = tabInfo.url;
 
-  if (typeof urlCache[tabUrl] === "boolean" && urlCache[tabUrl] === false) {
+  if
+  (typeof urlCache[tabUrl] === "boolean" && urlCache[tabUrl] === false) {
     return;
-  } else if (urlCache[tabUrl] === undefined) {
-    
+  }
+  else if
+  (urlCache[tabUrl] === undefined) {
     if (
-       tabUrl.includes("https://www.focusmate.com/launch/") ||
-        tabUrl.includes("csb.app/")
-        ) {
-            chrome.storage.sync.get(['time'], function (result) {
-                console.log(result);
-                if (result.time){
-                   delete result.time;
-                   console.log("deleted time");
-                   console.log("result:")
-                   console.log(result);
-                }
-              })
-       
+      tabUrl.includes("https://www.focusmate.com/launch/") ||
+      tabUrl.includes("csb.app/")
+    ) {
+      chrome.storage.sync.get(['time'], function (result) {
+        console.log(result);
+        if (result.time) {
+          delete result.time;
+          console.log("deleted time");
+          console.log("result:")
+          console.log(result);
+        }
+      })
+
       if (playedForAll !== undefined) {
         for (const timePlayed of Object.getOwnPropertyNames(playedForAll)) {
           delete playedForAll[timePlayed];
-          
+
         }
-         
+
       }
-      
+
 
       urlCache[tabUrl] = true;
     } else {
@@ -44,7 +46,7 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
     }
   }
 
-  chrome.storage.sync.get(null, function(result) {
+  chrome.storage.sync.get(null, function (result) {
     const chosenTimes = [];
 
     for (let userOption in result) {
@@ -59,7 +61,7 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
         const conditionsMins = a =>
           a.split(" ")[1] === "seconds" ||
           (a.split(" ")[1] === "minutes" && a.split(" ")[0] < chosenTimeNumber);
-       
+
         //if chosenTimeOption is in seconds and an alarm played for seconds that were less than ChosenTimeNumber - not going to happen in current version of app since there is only one seconds option but maybe later on.
         const conditionsSecs = a =>
           a.split(" ")[1] === "seconds" && a.split(" ")[0] < chosenTimeNumber;
@@ -77,9 +79,9 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
             ? shouldAddAlarm(conditionsMins)
             : shouldAddAlarm(conditionsSecs);
         if (dontAddAlarm !== true) {
-            chosenTimes.push(chosenTimeOption);
+          chosenTimes.push(chosenTimeOption);
         }
-       
+
       }
     }
 
