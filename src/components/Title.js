@@ -8,41 +8,32 @@ import TypoGraphy from '@material-ui/core/TypoGraphy';
 
 const styles = {
   root: {
-        display: 'flex',
+    display: 'flex',
     flex: 'wrap',
     flexDirection: "column",
     padding: '8px 20px 8px 20px',
     alignItems: "center",
     backgroundColor: "#4648aa",
     color: "white"
-   
-
   },
-  title: {
-  
-  },
-
 }
 
+function Title(props) {
+  const { classes } = props;
 
-  function Title(props){
-   const { classes } = props;
-
-    return (
-      <div className={classes.root}>
-
-      <TypoGraphy  variant="h4" 
-      color="inherit"
+  return (
+    <div className={classes.root}>
+      <TypoGraphy
+        variant="h4"
+        color="inherit"
       >
-      Focusalarm 
+        Focusalarm (updated)
        </TypoGraphy>
-      <TypoGraphy className={classes.root} variant="h6" color="inherit">An alarm for Focusmate</TypoGraphy>
+       <TypoGraphy className={classes.root} variant="h6" color="inherit">An alarm for Focusmate</TypoGraphy>
+    </div>
+  );
 
-
- </div>
-    );
-  
-    }
+}
 
 Title.propTypes = {
   classes: PropTypes.object.isRequired,

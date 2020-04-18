@@ -2,15 +2,12 @@
 
 /*global chrome*/
 
-
-
 const played = {};
-let playedForAll = {};
+const playedForAll = {};
 const urlCache = {};
 
 function handleTimeChange(tabId, changeInfo, tabInfo) {
   const tabUrl = tabInfo.url;
-
   if
   (typeof urlCache[tabUrl] === "boolean" && urlCache[tabUrl] === false) {
     return;
@@ -18,25 +15,24 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
   else if
   (urlCache[tabUrl] === undefined) {
     if (
+      //or just focusmate.com? for session start alarm
       tabUrl.includes("https://www.focusmate.com/launch/") ||
-      tabUrl.includes("csb.app/")
+      tabUrl.includes("csb.app")
     ) {
-      chrome.storage.sync.get(['time'], function (result) {
-        console.log(result);
+      //the older version of the app had result.time. need to make sure this is cleared from chrome.storage
+      chrome.storage.sync.get( null,  function (result) {
+        console.log("result for time", result);
         if (result.time) {
-          delete result.time;
-          console.log("deleted time");
-          console.log("result:")
-          console.log(result);
+          chrome.storage.sync.remove(['time'], function(result) {
+            console.log(result);
+            });
         }
       })
 
       if (playedForAll !== undefined) {
         for (const timePlayed of Object.getOwnPropertyNames(playedForAll)) {
           delete playedForAll[timePlayed];
-
         }
-
       }
 
 
@@ -48,25 +44,24 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
 
   chrome.storage.sync.get(null, function (result) {
     const chosenTimes = [];
-
     for (let userOption in result) {
       if (result[userOption][0] === true) {
         const chosenTimeOption = result[userOption][1];
-
         const chosenTimeNumber = parseInt(chosenTimeOption, 10);
 
-
-        //if chosenTimeOption is in minutes and an alarm played for seconds
-        //if chosenTimeOption is in minutes and an alarm played for minutes that were less than chosenTimeNumber
-        const conditionsMins = a =>
-          a.split(" ")[1] === "seconds" ||
-          (a.split(" ")[1] === "minutes" && a.split(" ")[0] < chosenTimeNumber);
+        // if chosenTimeOption is in minutes and an alarm played for seconds
+        // if chosenTimeOption is in minutes and an alarm played for minutes that were less than chosenTimeNumber
+        // returns true if for example chosen time number is 2 minutes and an alarm that already played was 20 seconds (or any seconds) or 1 minutes.
+        const conditionsMins = alarmThatAlreadyPlayed =>
+          alarmThatAlreadyPlayed.split(" ")[1] === "seconds" ||
+          (alarmThatAlreadyPlayed.split(" ")[1] === "minutes" && alarmThatAlreadyPlayed.split(" ")[0] < chosenTimeNumber);
 
         //if chosenTimeOption is in seconds and an alarm played for seconds that were less than ChosenTimeNumber - not going to happen in current version of app since there is only one seconds option but maybe later on.
-        const conditionsSecs = a =>
-          a.split(" ")[1] === "seconds" && a.split(" ")[0] < chosenTimeNumber;
-
-        const shouldAddAlarm = conditions => {
+        // return true if for example alarm that already played is 30 seconds and chosen time number is 40 seconds
+        const conditionsSecs = alarmThatAlreadyPlayed =>
+          alarmThatAlreadyPlayed.split(" ")[1] === "seconds" && alarmThatAlreadyPlayed.split(" ")[0] < chosenTimeNumber;
+      
+        const alarmPassed = conditions => {
           for (let timeIndex in playedForAll) {
             if (conditions(timeIndex)) {
               return true;
@@ -75,13 +70,15 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
         };
 
         const dontAddAlarm =
+        //if the chosen time is for minutes run alarmPassed with the minutes conditions, if for seconds with the seconds condition
           chosenTimeOption.split(" ")[1] === "minutes"
-            ? shouldAddAlarm(conditionsMins)
-            : shouldAddAlarm(conditionsSecs);
-        if (dontAddAlarm !== true) {
+            ?
+             alarmPassed(conditionsMins) 
+            : alarmPassed(conditionsSecs);
+       
+            if (dontAddAlarm !== true) {
           chosenTimes.push(chosenTimeOption);
         }
-
       }
     }
 
@@ -105,6 +102,7 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
 
     const title = changeInfo.title || "Title";
     const splitTitle = title.split(" ");
+    const minutesSecondsArray = splitTitle[0].split(":");
 
     const playAudio = alarm => {
       audio.play();
@@ -113,21 +111,20 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
     };
 
     if (!played[tabId]) {
-      const minutes = t => parseInt(t.split(" ")[2], 10);
-      const seconds = t => parseInt(t.split(" ")[3], 10);
-
-      const validTitle = splitTitle.length === 4 && splitTitle[0] === "Ends";
+      const minutes = t => parseInt(t[0], 10);
+      //will still work if for example 00:05 because of the parseInt()
+      const seconds = t => parseInt(t[1], 10);
+      const validTitle = splitTitle.length === 5 && splitTitle[2] === "end"; //for start alarm ||"start"
 
       const Play = (conditions, a) => {
-        if (title === "Session Completed" || (validTitle && conditions)) {
+        if (title === "Finished! - Focusmate" || (validTitle && conditions)) {
           playAudio(a);
         }
       };
       for (let chosenTime of chosenTimes) {
         timeLeftChoice = parseInt(chosenTime, 10);
-        const conditionsMinutes = minutes(title) < timeLeftChoice;
-        const conditionsSeconds =
-          minutes(title) === 0 && seconds(title) < timeLeftChoice;
+        const conditionsMinutes = minutes(minutesSecondsArray) < timeLeftChoice;
+        const conditionsSeconds = minutes(minutesSecondsArray) === 0 && seconds(minutesSecondsArray) < timeLeftChoice;
         if (!playedForAll[chosenTime]) {
           chosenTime.split(" ")[1] === "minutes"
             ? Play(conditionsMinutes, chosenTime)
@@ -137,7 +134,7 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
 
       if (
         Object.keys(playedForAll).length >= chosenTimes.length &&
-        title === "Session Completed"
+        title === "Finished! - Focusmate"
       ) {
         played[tabId] = true;
       }
