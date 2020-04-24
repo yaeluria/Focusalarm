@@ -29,7 +29,6 @@ const styles = theme => ({
     }
 });
 
-//another option- popup- no sound!
 
 class SoundRadioForm extends React.Component {
 
