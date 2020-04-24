@@ -15,17 +15,17 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
   else if
   (urlCache[tabUrl] === undefined) {
     if (
-      //or just focusmate.com? for session start alarm
-      tabUrl.includes("https://www.focusmate.com/launch/") ||
+      tabUrl.includes("https://www.focusmate.com/launch") ||
+      tabUrl.includes("https://www.focusmate.com/dashboard")||
       tabUrl.includes("csb.app")
     ) {
       //the older version of the app had result.time. need to make sure this is cleared from chrome.storage
-      chrome.storage.sync.get( null,  function (result) {
+      chrome.storage.sync.get(null, function (result) {
         console.log("result for time", result);
         if (result.time) {
-          chrome.storage.sync.remove(['time'], function(result) {
+          chrome.storage.sync.remove(['time'], function (result) {
             console.log(result);
-            });
+          });
         }
       })
 
@@ -60,7 +60,7 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
         // return true if for example alarm that already played is 30 seconds and chosen time number is 40 seconds
         const conditionsSecs = alarmThatAlreadyPlayed =>
           alarmThatAlreadyPlayed.split(" ")[1] === "seconds" && alarmThatAlreadyPlayed.split(" ")[0] < chosenTimeNumber;
-      
+
         const alarmPassed = conditions => {
           for (let timeIndex in playedForAll) {
             if (conditions(timeIndex)) {
@@ -70,13 +70,13 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
         };
 
         const dontAddAlarm =
-        //if the chosen time is for minutes run alarmPassed with the minutes conditions, if for seconds with the seconds condition
+          //if the chosen time is for minutes run alarmPassed with the minutes conditions, if for seconds with the seconds condition
           chosenTimeOption.split(" ")[1] === "minutes"
             ?
-             alarmPassed(conditionsMins) 
+            alarmPassed(conditionsMins)
             : alarmPassed(conditionsSecs);
-       
-            if (dontAddAlarm !== true) {
+
+        if (dontAddAlarm !== true) {
           chosenTimes.push(chosenTimeOption);
         }
       }
@@ -106,7 +106,7 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
 
     const playAudio = alarm => {
       audio.play();
-      console.log("should play audio");
+      console.log("should play audio", title, alarm);
       playedForAll[alarm] = true;
     };
 
@@ -114,13 +114,18 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
       const minutes = t => parseInt(t[0], 10);
       //will still work if for example 00:05 because of the parseInt()
       const seconds = t => parseInt(t[1], 10);
-      const validTitle = splitTitle.length === 5 && splitTitle[2] === "end"; //for start alarm ||"start"
+      const validTitle = splitTitle.length === 5 && splitTitle[2] === "end" || splitTitle[2] === "start"; //for start alarm ||"start"
 
       const Play = (conditions, a) => {
-        if (title === "Finished! - Focusmate" || (validTitle && conditions)) {
+        if ((title === "Finished! - Focusmate" || title === "Session in Progress - Focusmate") //session in progress might be a problem
+          ||
+          (validTitle && conditions)) {
           playAudio(a);
         }
       };
+      // this goes through each chosen time, if the chosen time is in minutes, for example 2 minutes it checks the title
+      // if the title is for example 1:59 until start, it will see that the parsed minute count is smaller than that chosen time
+      // and it will play an alarm if it hadn't already played an alarm for that chosen time
       for (let chosenTime of chosenTimes) {
         timeLeftChoice = parseInt(chosenTime, 10);
         const conditionsMinutes = minutes(minutesSecondsArray) < timeLeftChoice;
@@ -136,6 +141,7 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
         Object.keys(playedForAll).length >= chosenTimes.length &&
         title === "Finished! - Focusmate"
       ) {
+        //why did I do this?
         played[tabId] = true;
       }
     }
