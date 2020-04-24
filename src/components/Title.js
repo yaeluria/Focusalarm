@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import TypoGraphy from '@material-ui/core/TypoGraphy';
+import Typography from '@material-ui/core/Typography';
 
 
 
@@ -23,13 +23,13 @@ function Title(props) {
 
   return (
     <div className={classes.root}>
-      <TypoGraphy
+      <Typography
         variant="h4"
         color="inherit"
       >
-        Focusalarm (updated)
-       </TypoGraphy>
-       <TypoGraphy className={classes.root} variant="h6" color="inherit">An alarm for Focusmate</TypoGraphy>
+        Focusalarm
+       </Typography>
+       <Typography className={classes.root} variant="h6" color="inherit">An alarm for Focusmate</Typography>
     </div>
   );
 
