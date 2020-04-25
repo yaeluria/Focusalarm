@@ -8,9 +8,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 
-
-
-
 const styles = theme => ({
   root: {
     display: 'flex',
@@ -21,15 +18,6 @@ const styles = theme => ({
   group: {
     margin: `${theme.spacing.unit}px 0`,
   },
-  paper: {
-    padding: theme.spacing.unit * 2,
-    height: '100%',
-    color: theme.palette.text.secondary,
-  },
-  control: {
-    padding: theme.spacing.unit * 2,
-  },
-
 });
 
 class TimeCheckForm extends React.Component {
@@ -41,37 +29,28 @@ class TimeCheckForm extends React.Component {
       twentySeconds: false
     }
   
-    componentDidMount() {
-      this.fetchSettings();
+  componentDidMount() {
+    this.fetchSettings();
   }
-
-
+  
   fetchSettings() {
       for (let timeOption in this.state) {
           chrome.storage.sync.get([timeOption], (result) => {
-              console.log(result[timeOption]);
               const timeStatus = (result[timeOption])[0] || false;
-              console.log(timeStatus);
               this.setState({[timeOption]: timeStatus});
           })
       }
   }
 
-
   handleChange = name => event => {
       const checked = event.target.checked;
       this.setState({[name]: checked});
       chrome.storage.sync.set({[name]: [checked, event.target.value]}, () => {
-          console.log([name] + ' is set to ' + checked);
       });
   };
-  
-
 
   render() {
     const { classes } = this.props;
-    
-
     return (
       <div className={classes.root}>
 
@@ -80,10 +59,7 @@ class TimeCheckForm extends React.Component {
           <FormGroup
             row="true"
             aria-label="Ringtime"
-            name="ringtime"
             className={classes.group}
-            value={this.state.value}
-            onChange={this.handleChange}
           >
             <FormControlLabel value="10 minutes" control={<Checkbox checked={this.state.tenMinutes} onChange = {this.handleChange('tenMinutes')} value ="10 minutes"/>} label="10 minutes" />
             <FormControlLabel value="2 minutes" control={<Checkbox checked={this.state.twoMinutes} onChange = {this.handleChange('twoMinutes')} value ="2 minutes" />} label="2 minutes" />
@@ -92,9 +68,6 @@ class TimeCheckForm extends React.Component {
 
           </FormGroup>
         </FormControl>
-        
-
-
       </div>
     );
   }
