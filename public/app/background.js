@@ -15,13 +15,11 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
   else if
   (urlCache[tabUrl] === undefined) {
     if (
-      //or just focusmate.com? for session start alarm
       tabUrl.includes("https://www.focusmate.com/launch/") ||
       tabUrl.includes("csb.app")
     ) {
       //the older version of the app had result.time. need to make sure this is cleared from chrome.storage
       chrome.storage.sync.get( null,  function (result) {
-        console.log("result for time", result);
         if (result.time) {
           chrome.storage.sync.remove(['time'], function(result) {
             console.log(result);
@@ -34,8 +32,6 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
           delete playedForAll[timePlayed];
         }
       }
-
-
       urlCache[tabUrl] = true;
     } else {
       urlCache[tabUrl] = false;
@@ -106,7 +102,7 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
 
     const playAudio = alarm => {
       audio.play();
-      console.log("should play audio");
+      console.log("should play audio", alarm, title);
       playedForAll[alarm] = true;
     };
 
