@@ -1,5 +1,25 @@
 
-## Run the extension locally
+About Focusalarm Chrome Extension
+----------------------------------
+----------------------------------
+Focusalarm is a chrome extension built for Focusmate.com users. It was built with React and Material UI, and uses Chrome Tabs and Storage APIs. You can install it at this [link](https://chrome.google.com/webstore/detail/focusalarm/ilcajdpmgfbeggnpffmohcopdgpcdndh) in the chrome web store.
+
+## Current Features
+
+* Set an alarm go off before the end of Focusmate sessions, with different sounds and options of ringing times to choose from. 
+
+## Planned Features
+
+* Set an alarm to go off before/at the beginning of Focusmate sessions.
+
+
+
+
+
+
+ Run the extension locally
+ -------------------------
+ -------------------------
 ## Project setup
 
 In the project directory, install dependencies using:
