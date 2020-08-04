@@ -110,7 +110,7 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
       playedForAll[alarm] = true;
     };
 
-    if (!played[tabId]) {
+    if (!played[tabUrl]) {
       const minutes = t => parseInt(t[0], 10);
       //will still work if for example 00:05 because of the parseInt()
       const seconds = t => parseInt(t[1], 10);
@@ -141,8 +141,7 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
         Object.keys(playedForAll).length >= chosenTimes.length &&
         title === "Finished! - Focusmate"
       ) {
-        //why did I do this?
-        played[tabId] = true;
+        played[tabUrl] = true;
       }
     }
   });
