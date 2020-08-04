@@ -1,4 +1,4 @@
-// focusmate session url example: https://www.focusmate.com/launch/44169c1a-5efc-4289-b3f0-80406b02aa9d
+// focusmate session url example: https://www.focusmate.com/session/1596316500
 
 /*global chrome*/
 
@@ -15,7 +15,7 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
   else if
   (urlCache[tabUrl] === undefined) {
     if (
-      tabUrl.includes("https://www.focusmate.com/launch/") ||
+      tabUrl.includes("https://www.focusmate.com/session/") ||
       tabUrl.includes("csb.app")
     ) {
       //the older version of the app had result.time. need to make sure this is cleared from chrome.storage
