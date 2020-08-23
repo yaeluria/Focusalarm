@@ -1,4 +1,4 @@
-// focusmate session url example: https://www.focusmate.com/session/44169c1a-5efc-4289-b3f0-80406b02aa9d
+// focusmate session url example: https://www.focusmate.com/session/1596316500
 
 /*global chrome*/
 
@@ -31,7 +31,6 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
           delete playedForAll[timePlayed];
         }
       }
-
       urlCache[tabUrl] = true;
     } else {
       urlCache[tabUrl] = false;
@@ -130,7 +129,6 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
       }
     }
 
-    //would be a problem for dashboard
     if (!played[tabUrl]) {
       const playAudio = (alarm) => {
         audio.play();
@@ -141,7 +139,7 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
       
       const Play = (conditions, a) => {
         if (
-          title === "Finished! - Focusmate" || //session in progress might be a problem
+          title === "Finished! - Focusmate" || 
           (validTitleEnd && conditions)
         ) {
           playAudio(a);

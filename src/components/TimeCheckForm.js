@@ -33,9 +33,7 @@ class TimeCheckForm extends React.Component {
   fetchSettings() {
       for (let timeOption in this.state) {
           chrome.storage.sync.get([timeOption], (result) => {
-              console.log(result[timeOption]);
               const timeStatus = (result[timeOption])[0] || false;
-              console.log(timeStatus);
               this.setState({[timeOption]: timeStatus});
           })
       }
