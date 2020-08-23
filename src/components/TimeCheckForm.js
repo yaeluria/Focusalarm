@@ -19,12 +19,11 @@ const styles = theme => ({
 
 class TimeCheckForm extends React.Component {
   state = {
-    fiftyOneMinutes: false,
     fiftyMinutes: true,
-    tenMinutes: true,
+    tenMinutes: false,
     twoMinutes: false,
     oneMinute: false,
-    twentySeconds: false
+    twentySeconds: true
   };
 
   componentDidMount() {
@@ -55,23 +54,14 @@ class TimeCheckForm extends React.Component {
     return (
       <div className={classes.root}>
         <FormControl component="fieldset" className={classes.formControl}>
-          <FormLabel component="legend">Notify me before the session starts</FormLabel>
-          <FormGroup 
-            className = {classes.group}
+          <FormLabel component="legend">
+            Notify me when the session starts
+          </FormLabel>
+          <FormGroup
+            className={classes.group}
             row="true"
             aria-label="Ringtime start"
           >
-            <FormControlLabel
-              value="51 minutes"
-              control={
-                <Checkbox
-                  checked={this.state.fiftyOneMinutes}
-                  onChange={this.handleTimeChoice("fiftyOneMinutes")}
-                  value="51 minutes"
-                />
-              }
-              label="1 minute"
-            />
             <FormControlLabel
               value="50 minutes"
               control={
@@ -88,7 +78,7 @@ class TimeCheckForm extends React.Component {
         <FormControl component="fieldset" className={classes.formControl}>
           <FormLabel>Notify me before the session ends</FormLabel>
           <FormGroup
-            className ={classes.group}
+            className={classes.group}
             row="true"
             aria-label="Ringtime end"
           >
