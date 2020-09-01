@@ -1,138 +1,120 @@
 /*global chrome*/
 import React from "react";
-import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core/styles";
-import Checkbox from "@material-ui/core/Checkbox";
+import { makeStyles } from "@material-ui/core/styles";
+import FormLabel from "@material-ui/core/FormLabel";
+import FormControl from "@material-ui/core/FormControl";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormControl from "@material-ui/core/FormControl";
-import FormLabel from "@material-ui/core/FormLabel";
+import Checkbox from "@material-ui/core/Checkbox";
 
-const styles = theme => ({
-  root: {
-    margin: `${theme.spacing.unit * 3}px 10px`
-  },
+const useStyles = makeStyles((theme) => ({
   formControl: {
-    marginTop: theme.spacing.unit * 3
-  }
-});
+    margin: "24px 0px 0px 24px",
+  },
+}));
 
-class TimeCheckForm extends React.Component {
-  state = {
-    fiftyMinutes: true,
+export default function TimeCheckForm() {
+  const classes = useStyles();
+
+  const [state, setState] = React.useState({
+    fiftyMinutes: false,
     tenMinutes: false,
     twoMinutes: false,
     oneMinute: false,
-    twentySeconds: true
-  };
+    twentySeconds: false,
+  });
 
-  componentDidMount() {
-    this.fetchSettings();
-  }
+  React.useEffect(() => {
+    for (let timeOption in state) {
+      chrome.storage.sync.get([timeOption], (result) => {
+        setState({ [timeOption]: result[timeOption][0] });
+      });
+    }
+  }, []);
 
-  fetchSettings() {
-      for (let timeOption in this.state) {
-          chrome.storage.sync.get([timeOption], (result) => {
-              const timeStatus = (result[timeOption])[0] || false;
-              this.setState({[timeOption]: timeStatus});
-          })
-      }
-  }
-
-  handleTimeChoice = name => event => {
-    const checked = event.target.checked;
-    this.setState({ [name]: checked });
-    chrome.storage.sync.set({ [name]: [checked, event.target.value] }, () => {
+  const handleTimeChoice = (event) => {
+    const { name, checked, value } = event.target;
+    setState({ ...state, [name]: checked });
+    chrome.storage.sync.set({ [name]: [checked, value] }, () => {
       console.log([name] + " is set to " + checked);
     });
   };
 
-  render() {
-    const { classes } = this.props;
-    return (
-      <div className={classes.root}>
-        <FormControl component="fieldset" className={classes.formControl}>
-          <FormLabel component="legend">
-            Notify me when the session starts
-          </FormLabel>
-          <FormGroup
-            className={classes.group}
-            row="true"
-            aria-label="Ringtime start"
-          >
-            <FormControlLabel
+  const {
+    fiftyMinutes,
+    tenMinutes,
+    twoMinutes,
+    oneMinute,
+    twentySeconds,
+  } = state;
+
+  return (
+    <div>
+      <FormControl component="fieldset" className={classes.formControl}>
+        <FormLabel component="legend">
+          Notify me when the session starts
+        </FormLabel>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={fiftyMinutes}
+              onChange={handleTimeChoice}
+              name="fiftyMinutes"
               value="50 minutes"
-              control={
-                <Checkbox
-                  checked={this.state.fiftyMinutes}
-                  onChange={this.handleTimeChoice("fiftyMinutes")}
-                  value="50 minutes"
-                />
-              }
-              label="On start"
             />
-          </FormGroup>
-        </FormControl>
-        <FormControl component="fieldset" className={classes.formControl}>
-          <FormLabel>Notify me before the session ends</FormLabel>
-          <FormGroup
-            className={classes.group}
-            row="true"
-            aria-label="Ringtime end"
-          >
-            <FormControlLabel
-              value="10 minutes"
-              control={
-                <Checkbox
-                  checked={this.state.tenMinutes}
-                  onChange={this.handleTimeChoice("tenMinutes")}
-                  value="10 minutes"
-                />
-              }
-              label="10 minutes"
-            />
-            <FormControlLabel
-              value="2 minutes"
-              control={
-                <Checkbox
-                  checked={this.state.twoMinutes}
-                  onChange={this.handleTimeChoice("twoMinutes")}
-                  value="2 minutes"
-                />
-              }
-              label="2 minutes"
-            />
-            <FormControlLabel
-              value="1 minutes"
-              control={
-                <Checkbox
-                  checked={this.state.oneMinute}
-                  onChange={this.handleTimeChoice("oneMinute")}
-                  value="1 minutes"
-                />
-              }
-              label="1 minute"
-            />
-            <FormControlLabel
-              value="20 seconds"
-              control={
-                <Checkbox
-                  checked={this.state.twentySeconds}
-                  onChange={this.handleTimeChoice("twentySeconds")}
-                  value="20 seconds"
-                />
-              }
-              label="20 seconds"
-            />
-          </FormGroup>
-        </FormControl>
-      </div>
-    );
-  }
+          }
+          label="A few seconds before"
+        />
+      </FormControl>
+      <FormControl component="fieldset" className={classes.formControl}>
+        <FormLabel>Notify me before the session ends</FormLabel>
+        <FormGroup row="true" aria-label="Ringtime end">
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={tenMinutes}
+                onChange={handleTimeChoice}
+                name="tenMinutes"
+                value="10 minutes"
+              />
+            }
+            label="10 minutes"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={twoMinutes}
+                onChange={handleTimeChoice}
+                name="twoMinutes"
+                value="2 minutes"
+              />
+            }
+            label="2 minutes"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={oneMinute}
+                onChange={handleTimeChoice}
+                name="oneMinute"
+                value="1 minutes"
+              />
+            }
+            label="1 minute"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={twentySeconds}
+                onChange={handleTimeChoice}
+                name="twentySeconds"
+                value="20 seconds"
+              />
+            }
+            label="20 seconds"
+          />
+        </FormGroup>
+      </FormControl>
+    </div>
+  );
 }
-
-TimeCheckForm.propTypes = {
-  classes: PropTypes.object.isRequired
-};
-
-export default withStyles(styles)(TimeCheckForm);
