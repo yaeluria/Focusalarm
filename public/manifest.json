@@ -15,7 +15,7 @@
   "background": {
     "scripts": ["app/background.js"]
 },
-"content_security_policy": "script-src 'self' 'sha256-5As4+3YpY62+l38PsxCEkjB1R4YtyktBtRScTJ3fyLU='; object-src 'self'",
+"content_security_policy": "script-src 'self' 'sha256-gv4sb4aapTzRqjrB5epKwDYwPiVoA/DPgulijQJ/sYA='; object-src 'self'",
 "permissions": [
   "*://*.focusmate.com/",
   "*://*.csb.app/",
