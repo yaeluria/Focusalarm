@@ -25,11 +25,9 @@ export default function TimeCheckForm() {
   });
 
   React.useEffect(() => {
-    for (let timeOption in state) {
-      chrome.storage.sync.get([timeOption], (result) => {
-        setState({ [timeOption]: result[timeOption][0] });
+      chrome.storage.sync.get(state, (result) => {
+        setState(result);
       });
-    }
   }, []);
 
   const handleTimeChoice = (event) => {
