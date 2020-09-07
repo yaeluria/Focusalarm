@@ -37,13 +37,22 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
     }
   }
 
+  const timeOption = (choice) =>
+    ({
+      fiftyMinutes: "50 minutes",
+      tenMinutes: "10 minutes",
+      twoMinutes: "2 minutes",
+      oneMinute: "1 minute",
+      twentySeconds: "20 seconds",
+    }[choice]);
+
   chrome.storage.sync.get(null, function (result) {
     let chosenBefore;
     const chosenTimes = [];
     for (let userOption in result) {
-      if (result[userOption][0] === true) {
-        if (result[userOption][1] !== "50 minutes") {
-          const chosenTimeOption = result[userOption][1];
+      if (result[userOption] === true) {
+        if (timeOption(userOption) !== "50 minutes") {
+          const chosenTimeOption = timeOption(userOption);
           const chosenTimeNumber = parseInt(chosenTimeOption, 10);
           // if chosenTimeOption is in minutes and an alarm played for seconds
           // if chosenTimeOption is in minutes and an alarm played for minutes that were less than chosenTimeNumber
@@ -77,9 +86,9 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
             chosenTimes.push(chosenTimeOption);
           }
         } else {
-            if(!played.before){
-              chosenBefore = true;
-            }
+          if (!played.before) {
+            chosenBefore = true;
+          }
         }
       }
     }
@@ -105,27 +114,31 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
     const title = changeInfo.title || "Title";
     const splitTitle = title.split(" ");
     const minutesSecondsArray = splitTitle[0].split(":");
-    const minutes = t => parseInt(t[0], 10);
-        //will still work if for example 00:05 because of the parseInt()
-    const seconds = t => parseInt(t[1], 10);
-  
-    const validTitle = splitTitle.length === 5; 
+    const minutes = (t) => parseInt(t[0], 10);
+    //will still work if for example 00:05 because of the parseInt()
+    const seconds = (t) => parseInt(t[1], 10);
+
+    const validTitle = splitTitle.length === 5;
     const validTitleEnd = validTitle && splitTitle[2] === "end";
     const validTitleStart = validTitle && splitTitle[2] === "start";
     //chosenBefore has a separate function
     // if the user chose a start alarm check if title is "until start"
-    if(chosenBefore){
-      if(validTitleStart && minutes(minutesSecondsArray) === 0 && seconds(minutesSecondsArray) <= 6){
+    if (chosenBefore) {
+      if (
+        validTitleStart &&
+        minutes(minutesSecondsArray) === 0 &&
+        seconds(minutesSecondsArray) <= 6
+      ) {
         console.log("should play start alarm", title);
         audio.play();
         chosenBefore = false;
-        //it will only turn true 
+        //it will only turn true
         played.before = true;
         //wait 10 seconds and then set played.before to false so if chosenBefore can get set to true once again
         // and the next time the parsed title meets the conditions, if it's not within a
         // 10 second range from the last time the alarm played (a new session could start in 15 minutes)
         // the alarm will play again
-        setTimeout(() => played.before = false, 10000 )
+        setTimeout(() => (played.before = false), 10000);
       }
     }
 
@@ -135,11 +148,10 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
         console.log("should play audio", title, alarm);
         playedForAll[alarm] = true;
       };
-      
-      
+
       const Play = (conditions, a) => {
         if (
-          title === "Finished! - Focusmate" || 
+          title === "Finished! - Focusmate" ||
           (validTitleEnd && conditions)
         ) {
           playAudio(a);
