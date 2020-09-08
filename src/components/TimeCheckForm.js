@@ -29,11 +29,11 @@ export default function TimeCheckForm() {
         setState(result);
       });
   }, []);
-
+  
   const handleTimeChoice = (event) => {
-    const { name, checked, value } = event.target;
+    const { name, checked } = event.target;
     setState({ ...state, [name]: checked });
-    chrome.storage.sync.set({ [name]: [checked, value] }, () => {
+    chrome.storage.sync.set({ ...state, [name]: checked }, () => {
       console.log([name] + " is set to " + checked);
     });
   };
@@ -73,6 +73,7 @@ export default function TimeCheckForm() {
                 checked={tenMinutes}
                 onChange={handleTimeChoice}
                 name="tenMinutes"
+                //not so important to have the value since this is set in an obj. literal in background script but will leave it for now.
                 value="10 minutes"
               />
             }
