@@ -94,19 +94,7 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
     }
 
     const chosenSound = result.sound;
-
-    const linkForChoice = (choice) =>
-      ({
-        Bell:
-          "https://res.cloudinary.com/drvycak8r/video/upload/v1557737548/storage/30161__herbertboland__belltinystrike.wav",
-        Chirp:
-          "https://res.cloudinary.com/drvycak8r/video/upload/v1557737433/storage/85403__readeonly__canaryartie-3.wav",
-        "T.rex roar":
-          "https://interactive-examples.mdn.mozilla.net/media/examples/t-rex-roar.mp3",
-      }[choice]);
-
-    const soundLink = linkForChoice(chosenSound);
-
+    const soundLink = `/${chosenSound.toLowerCase()}.mp3`;
     const audio = new Audio(soundLink);
 
     let timeLeftChoice;
