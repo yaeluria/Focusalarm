@@ -8,8 +8,16 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    marginTop: theme.spacing(2),
+  },
   formControl: {
-    margin: "24px 0px 0px 24px",
+    margin: theme.spacing(2),
+    "& FormControlLabel": {
+      width: "40%",
+      display: "flex",
+      justifyContent: "space-between",
+    },
   },
 }));
 
@@ -25,11 +33,18 @@ export default function TimeCheckForm() {
   });
 
   React.useEffect(() => {
-      chrome.storage.sync.get(state, (result) => {
-        setState(result);
-      });
+    chrome.storage.sync.get(state, (result) => {
+      // if value is array (from previous version) - delete storage or convert to boolean
+      for (let key in result) {
+        if (Array.isArray(result[key])) {
+          result[key] = (result[key])[0]
+        }
+      }
+      chrome.storage.sync.set(result);
+      setState(result);
+    });
   }, []);
-  
+
   const handleTimeChoice = (event) => {
     const { name, checked } = event.target;
     setState({ ...state, [name]: checked });
@@ -47,10 +62,13 @@ export default function TimeCheckForm() {
   } = state;
 
   return (
-    <div>
+    <div className={classes.root}>
       <FormControl component="fieldset" className={classes.formControl}>
         <FormLabel component="legend">
           Notify me when the session starts
+        </FormLabel>
+        <FormLabel component="legend">
+          (if the dashboard/session window is open)
         </FormLabel>
         <FormControlLabel
           control={

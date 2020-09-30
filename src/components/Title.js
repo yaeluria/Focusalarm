@@ -1,47 +1,37 @@
+import React from "react";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-
-
-
-const styles = {
+const useStyles = makeStyles(() => ({
   root: {
-    display: 'flex',
-    flex: 'wrap',
+    display: "flex",
+    flex: "wrap",
     flexDirection: "column",
-    padding: '8px 20px 8px 20px',
+    padding: "8px 20px 8px 20px",
     alignItems: "center",
     backgroundColor: "#4648aa",
-    color: "white"
+    color: "white",
   },
-}
+  bold: {
+    fontWeight: "700",
+  },
+  light: {
+    fontWeight: "200",
+  },
+}));
 
-function Title(props) {
-  const { classes } = props;
+export default function Title() {
+  const classes = useStyles();
 
   return (
     <div className={classes.root}>
-      <Typography
-        variant="h4"
-        color="inherit"
-      >
-        Focusalarm
-       </Typography>
-       <Typography className={classes.root} variant="h6" color="inherit">An alarm for Focusmate</Typography>
+      <Typography variant="h4" color="inherit">
+        <span className={classes.bold}>Focus</span>
+        <span className={classes.light}>alarm</span>
+      </Typography>
+      <Typography variant="h6" color="inherit">
+      An alarm for <span className={classes.bold}>Focus</span><span className={classes.light}>mate</span>
+      </Typography>
     </div>
   );
-
 }
-
-Title.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(styles)(Title);
-
-
-
-
-

@@ -17,16 +17,16 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
       tabUrl.includes("csb.app")
     ) {
       //the older version of the app had result.time. need to make sure this is cleared from chrome.storage
-      chrome.storage.sync.get(null, function (result) {
+      chrome.storage.sync.get(null, (result) => {
         console.log("result for time", result);
         if (result.time) {
-          chrome.storage.sync.remove(["time"], function (result) {
+          chrome.storage.sync.remove(["time"], (result) => {
             console.log(result);
           });
         }
       });
 
-      if (playedForAll !== undefined) {
+      if (playedForAll) {
         for (const timePlayed of Object.getOwnPropertyNames(playedForAll)) {
           delete playedForAll[timePlayed];
         }
@@ -42,11 +42,11 @@ function handleTimeChange(tabId, changeInfo, tabInfo) {
       fiftyMinutes: "50 minutes",
       tenMinutes: "10 minutes",
       twoMinutes: "2 minutes",
-      oneMinute: "1 minute",
+      oneMinute: "1 minutes",
       twentySeconds: "20 seconds",
     }[choice]);
 
-  chrome.storage.sync.get(null, function (result) {
+  chrome.storage.sync.get(null, (result) =>{
     let chosenBefore;
     const chosenTimes = [];
     for (let userOption in result) {
