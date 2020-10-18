@@ -17,15 +17,14 @@ function handleTimeChange(tabId, changeInfo, Tab) {
       tabUrl.includes("csb.app")
     ) {
       //the older version of the app had result.time. need to make sure this is cleared from chrome.storage
-      chrome.storage.sync.get(null, (result) => {
-        console.log("result for time", result);
-        if (result.time) {
+      chrome.storage.sync.get(["time"], (result) => {
+        if (result) {
           chrome.storage.sync.remove(["time"], (result) => {
             console.log(result);
           });
         }
       });
-
+      
       if (playedForAll) {
         for (const timePlayed of Object.getOwnPropertyNames(playedForAll)) {
           delete playedForAll[timePlayed];
@@ -46,7 +45,7 @@ function handleTimeChange(tabId, changeInfo, Tab) {
       twentySeconds: "20 seconds",
     }[choice]);
 
-  chrome.storage.sync.get(null, (result) =>{
+  chrome.storage.sync.get(null, (result) => {
     let chosenBefore;
     const chosenTimes = [];
     for (let userOption in result) {
@@ -109,7 +108,7 @@ function handleTimeChange(tabId, changeInfo, Tab) {
     const validTitle = splitTitle.length === 5;
     const validTitleEnd = validTitle && splitTitle[2] === "end";
     const validTitleStart = validTitle && splitTitle[2] === "start";
-    //chosenBefore has a separate function
+    // chosenBefore has a separate function
     // if the user chose a start alarm check if title is "until start"
     if (chosenBefore) {
       if (
@@ -122,7 +121,7 @@ function handleTimeChange(tabId, changeInfo, Tab) {
         chosenBefore = false;
         //it will only turn true
         played.before = true;
-        //wait 10 seconds and then set played.before to false so if chosenBefore can get set to true once again
+        // wait 10 seconds and then set played.before to false so if chosenBefore can get set to true once again
         // and the next time the parsed title meets the conditions, if it's not within a
         // 10 second range from the last time the alarm played (a new session could start in 15 minutes)
         // the alarm will play again
