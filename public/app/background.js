@@ -6,9 +6,9 @@ const played = {};
 const playedForAll = {};
 const urlCache = {};
 
-function handleTimeChange(tabId, changeInfo, tabInfo) {  
-  const tabUrl = tabInfo.url;
-  if (typeof urlCache[tabUrl] === "boolean" && urlCache[tabUrl] === false) {
+function handleTimeChange(tabId, changeInfo, Tab) {
+  const tabUrl = Tab.url;
+  if (urlCache[tabUrl] === false) {
     return;
   } else if (urlCache[tabUrl] === undefined) {
     if (
