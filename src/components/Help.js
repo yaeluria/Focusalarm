@@ -14,7 +14,7 @@ export default function Title() {
   return (
     <div className={classes.root}>
     <Typography variant="body2">
-     This extension's creator is looking for a job. <a rel="noreferrer noopener" target="_blank" href="https://github.com/yaeluria/Focusalarm">Here's</a> how you can help her get hired.
+     This extension's creator is looking for a job. <a rel="noreferrer noopener" target="_blank" href="https://github.com/yaeluria/Focusalarm#about-me-focusalarms-developer-and-a-small-request">Here's</a> how you can help her get hired.
     </Typography>
     </div>
   );
