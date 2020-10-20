@@ -28,6 +28,9 @@ export default function SoundRadioForm() {
 
   React.useEffect(() => {
     chrome.storage.sync.get(["sound"], (result) => {
+      if(!result.sound){
+        setStorage("Bell");
+      }
       const sound = result.sound || "Bell";
       if (sound === "T.rex roar") {
         console.log("setting to bleat");

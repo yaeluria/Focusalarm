@@ -92,7 +92,7 @@ function handleTimeChange(tabId, changeInfo, Tab) {
       }
     }
 
-    const chosenSound = result.sound;
+    const chosenSound = result.sound || "Bell";
     const soundLink = `/${chosenSound.toLowerCase()}.mp3`;
     const audio = new Audio(soundLink);
 
