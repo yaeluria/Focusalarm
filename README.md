@@ -47,11 +47,8 @@ You can also of course test it in a Focusmate session. Please keep in mind that 
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-About Me (Focusalarm's developer) and a Small Request
------------------------------------------------------
-My name is Yael Luria. I’m a self-taught developer and used Focusmate sessions to help me keep on task while going through a lot of online courses, tutorials, and building projects. Focusalarm is my way of giving back to Focusmate’s amazingly supportive community.
+About Me (Focusalarm's developer)
+---------------------------------
+My name is Yael Luria. I’m a self-taught developer and have used Focusmate sessions to help me keep on task while going through a lot of online courses, tutorials, building projects and eventually finding a full time job as a Fullstack Developer at an awesome company. Focusalarm is my way of giving back to Focusmate’s amazingly supportive community. I've built it as a portfolio project and learnt a lot in the process.
 
-I’ve started looking for a job in the past few months and it’s been extremely tough out there due to the recent circumstances. I realized my only chance of getting hired as a Junior Developer with no formal education in the field is to reach out to people.
-
-
-If you appreciate Focusalarm, please consider helping me out by spreading the word. If you know anyone who might be hiring Front End Developers with experience in React - please let them know about me. You can share my [LinkedIn](https://www.linkedin.com/in/yaeluria/) or [Github](https://github.com/yaeluria) profile with them, or email me directly at yaeluria@gmail.com. I am based in Israel so opportunities here or in a remote team would be ideal. I am also a US citizen, a native English speaker, fluent in German and would be willing to relocate to the United States or Europe for the right opportunity. A huge thanks!
+If you've noticed Focusalarm is not working properly (sometimes this happens when Focusmate makes changes to their interface) or if you have any questions or suggestions, please contact me at yaeluria@gmail.com.

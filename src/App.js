@@ -3,7 +3,6 @@ import './App.css';
 import Title from './components/Title';
 import TimeCheckForm from './components/TimeCheckForm';
 import SoundRadioForm from './components/SoundRadioForm';
-import Help from './components/Help'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
 const font = "'Nunito', sans-serif"
@@ -21,7 +20,6 @@ function App() {
       <Title />
       <TimeCheckForm />
       <SoundRadioForm />
-      <Help />
     </ThemeProvider>
     </div>
   );
