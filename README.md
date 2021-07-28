@@ -8,8 +8,6 @@ Focusalarm is a chrome extension built for Focusmate.com users. It was built wit
 
 * Set an alarm go off before the end of Focusmate sessions, with different sounds and options of ringing times to choose from. 
 
-## Pending Release (currently being tested)
-
 * Set an alarm to go off a few seconds before the beginning of Focusmate sessions.
 
 
@@ -39,7 +37,7 @@ I made a sandbox app to mock a focusmate session scenario in terms of the timer 
 To access it use this [link](https://codesandbox.io/s/focusalarm-tester-updated-264-yrnj3). 
 
  To test, once setting the alarm times and sound on the extension popup,
- open the app in the sandobox in a new window. Input the desired time according to the alarm/s you want to test. 
+ open the app in the sandbox in a new window. Input the desired time according to the alarm/s you want to test. 
 
 The alarm should ring when the timer on the app reaches the time you set the alarm for. If you want to test the extension more than once on the mock app, you will have to make a clone of it and then open it in another window.
 
@@ -49,6 +47,6 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 About Me (Focusalarm's developer)
 ---------------------------------
-My name is Yael Luria. I’m a self-taught developer and have used Focusmate sessions to help me keep on task while going through a lot of online courses, tutorials, building projects and eventually finding a full time job as a Fullstack Developer at an awesome company. Focusalarm is my way of giving back to Focusmate’s amazingly supportive community. I've built it as a portfolio project and learnt a lot in the process.
+My name is Yael Luria. I’m a self-taught developer and have used Focusmate sessions to help me keep on task while going through a lot of online courses, tutorials, building projects and eventually finding a full time job as a Frontend Developer. Focusalarm is my way of giving back to Focusmate’s amazingly supportive community. I've built it as a portfolio project and learnt a lot in the process.
 
 If you've noticed Focusalarm is not working properly (sometimes this happens when Focusmate makes changes to their interface) or if you have any questions or suggestions, please contact me at yaeluria@gmail.com.
