@@ -14,7 +14,8 @@ function handleTimeChange(tabId, changeInfo, Tab) {
     if (
       tabUrl.includes("https://www.focusmate.com/session") ||
       tabUrl.includes("https://www.focusmate.com/dashboard") ||
-      tabUrl.includes("csb.app")
+      tabUrl.includes("csb.app") ||
+      tabUrl.includes("localhost")
     ) {
       //the older version of the app had result.time. need to make sure this is cleared from chrome.storage
       chrome.storage.sync.get(["time"], (result) => {
@@ -94,7 +95,6 @@ function handleTimeChange(tabId, changeInfo, Tab) {
 
     const chosenSound = result.sound || "Bell";
     const soundLink = `/${chosenSound.toLowerCase()}.mp3`;
-    const audio = new Audio(soundLink);
 
     let timeLeftChoice;
 
@@ -117,6 +117,7 @@ function handleTimeChange(tabId, changeInfo, Tab) {
         seconds(minutesSecondsArray) <= 6
       ) {
         console.log("should play start alarm", title);
+        const audio = new Audio(soundLink);
         audio.play();
         chosenBefore = false;
         //it will only turn true
@@ -131,6 +132,7 @@ function handleTimeChange(tabId, changeInfo, Tab) {
 
     if (!played[tabUrl]) {
       const playAudio = (alarm) => {
+        const audio = new Audio(soundLink);
         audio.play();
         console.log("should play audio", title, alarm);
         playedForAll[alarm] = true;
