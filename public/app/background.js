@@ -1,22 +1,23 @@
-// focusmate session url example: https://www.focusmate.com/session/1596316500
+// focusmate session url example: https://app.focusmate.com/session/1596316500
 
 /*global chrome*/
 
 const played = {};
 const playedForAll = {};
 const urlCache = {};
+const ALLOWED_TAB_URLS = [
+  "https://app.focusmate.com/session",
+  "https://app.focusmate.com/dashboard",
+  "csb.app",
+  "localhost",
+];
 
 function handleTimeChange(tabId, changeInfo, Tab) {
   const tabUrl = Tab.url;
   if (urlCache[tabUrl] === false) {
     return;
   } else if (urlCache[tabUrl] === undefined) {
-    if (
-      tabUrl.includes("https://www.focusmate.com/session") ||
-      tabUrl.includes("https://www.focusmate.com/dashboard") ||
-      tabUrl.includes("csb.app") ||
-      tabUrl.includes("localhost")
-    ) {
+    if (ALLOWED_TAB_URLS.some((url) => tabUrl.includes(url))) {
       //the older version of the app had result.time. need to make sure this is cleared from chrome.storage
       chrome.storage.sync.get(["time"], (result) => {
         if (result) {
@@ -25,7 +26,6 @@ function handleTimeChange(tabId, changeInfo, Tab) {
           });
         }
       });
-      
       if (playedForAll) {
         for (const timePlayed of Object.getOwnPropertyNames(playedForAll)) {
           delete playedForAll[timePlayed];
