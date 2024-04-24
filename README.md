@@ -47,6 +47,6 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 About Me (Focusalarm's developer)
 ---------------------------------
-My name is Yael Luria. I’m a self-taught developer and have used Focusmate sessions to help me keep on task while going through a lot of online courses, tutorials, building projects and eventually finding a full time job as a Frontend Developer. Focusalarm is my way of giving back to Focusmate’s amazingly supportive community. I've built it as a portfolio project and learnt a lot in the process.
+My name is Yael Luria. I’m a self-taught developer and have used Focusmate sessions to help me keep on task while going through a lot of online courses, tutorials, building projects and eventually finding a full time job as a Full Stack Developer. Focusalarm is my way of giving back to Focusmate’s amazingly supportive community. I've built it as a portfolio project and learnt a lot in the process.
 
 If you've noticed Focusalarm is not working properly (sometimes this happens when Focusmate makes changes to their interface) or if you have any questions or suggestions, please contact me at yaeluria@gmail.com.
