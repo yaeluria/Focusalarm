@@ -37,7 +37,7 @@ export default function TimeCheckForm() {
       // if value is array (from previous version) - delete storage or convert to boolean
       for (let key in result) {
         if (Array.isArray(result[key])) {
-          result[key] = (result[key])[0]
+          result[key] = result[key][0];
         }
       }
       chrome.storage.sync.set(result);
@@ -53,13 +53,8 @@ export default function TimeCheckForm() {
     });
   };
 
-  const {
-    fiftyMinutes,
-    tenMinutes,
-    twoMinutes,
-    oneMinute,
-    twentySeconds,
-  } = state;
+  const { fiftyMinutes, tenMinutes, twoMinutes, oneMinute, twentySeconds } =
+    state;
 
   return (
     <div className={classes.root}>
