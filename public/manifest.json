@@ -1,20 +1,27 @@
 {
-  "manifest_version": 2,
-
+  "manifest_version": 3,
   "name": "Focusalarm",
-  "description": "An Alarm for Focusmate.com: Before the session starts and ends, different options of times and sounds",
-  "version": "5.2.0",
-
-  "browser_action": {
+  "version": "6.0.0",
+  "description": "Alarm for Focusmate sessions",
+  "permissions": ["offscreen", "tabs", "storage"],
+  "background": {
+    "service_worker": "app/background.js"
+  },
+  "action": {
     "default_popup": "index.html",
     "default_title": "Open the popup"
   },
+  "host_permissions": ["https://app.focusmate.com/*", "https://*.csb.app/*"],
+  "web_accessible_resources": [
+    {
+      "resources": ["*.mp3"],
+      "matches": ["<all_urls>"]
+    }
+  ],
   "icons": {
     "128": "bell-logo.png"
   },
-  "background": {
-    "scripts": ["app/background.js"]
-  },
-  "content_security_policy": "script-src 'self' 'sha256-gv4sb4aapTzRqjrB5epKwDYwPiVoA/DPgulijQJ/sYA='; object-src 'self'",
-  "permissions": ["*://*.focusmate.com/", "*://*.csb.app/", "tabs", "storage"]
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
 }

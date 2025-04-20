@@ -12,20 +12,31 @@ const ALLOWED_TAB_URLS = [
   "localhost",
 ];
 
+const ensureOffscreenDocument = async () => {
+  const exists = await chrome.offscreen.hasDocument();
+  if (!exists) {
+    await chrome.offscreen.createDocument({
+      url: "app/offscreen.html",
+      reasons: [chrome.offscreen.Reason.AUDIO_PLAYBACK],
+      justification: "Need to play audio alarms in background",
+    });
+  }
+};
+
+const playOffscreenSound = async (sound) => {
+  await ensureOffscreenDocument();
+  chrome.runtime.sendMessage({
+    type: "PLAY_SOUND",
+    sound,
+  });
+};
+
 function handleTimeChange(tabId, changeInfo, Tab) {
   const tabUrl = Tab.url;
   if (urlCache[tabUrl] === false) {
     return;
   } else if (urlCache[tabUrl] === undefined) {
     if (ALLOWED_TAB_URLS.some((url) => tabUrl.includes(url))) {
-      //the older version of the app had result.time. need to make sure this is cleared from chrome.storage
-      chrome.storage.sync.get(["time"], (result) => {
-        if (result) {
-          chrome.storage.sync.remove(["time"], (result) => {
-            console.log(result);
-          });
-        }
-      });
       if (playedForAll) {
         for (const timePlayed of Object.getOwnPropertyNames(playedForAll)) {
           delete playedForAll[timePlayed];
@@ -93,8 +104,7 @@ function handleTimeChange(tabId, changeInfo, Tab) {
       }
     }
 
-    const chosenSound = result.sound || "Bell";
-    const soundLink = `/${chosenSound.toLowerCase()}.mp3`;
+    const chosenSound = (result.sound || "Bell").toLowerCase();
 
     let timeLeftChoice;
 
@@ -117,8 +127,7 @@ function handleTimeChange(tabId, changeInfo, Tab) {
         seconds(minutesSecondsArray) <= 6
       ) {
         console.log("should play start alarm", title);
-        const audio = new Audio(soundLink);
-        audio.play();
+        playOffscreenSound(chosenSound);
         chosenBefore = false;
         //it will only turn true
         played.before = true;
@@ -132,8 +141,7 @@ function handleTimeChange(tabId, changeInfo, Tab) {
 
     if (!played[tabUrl]) {
       const playAudio = (alarm) => {
-        const audio = new Audio(soundLink);
-        audio.play();
+        playOffscreenSound(chosenSound);
         console.log("should play audio", title, alarm);
         playedForAll[alarm] = true;
       };
